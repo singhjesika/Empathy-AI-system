@@ -1,0 +1,17 @@
+# ── Core ──────────────────────────────────────
+nrclex               # emotion detection
+groq                 # Groq LLM API (Llama3)
+
+# ── ML / NLP ──────────────────────────────────
+scikit-learn         # Random Forest mood predictor
+nltk                 # tokenisation & stopwords
+numpy                # feature vectors
+
+# ── Analytics ─────────────────────────────────
+matplotlib           # mood dashboard charts
+pandas               # timeline data processing
+
+# ── Voice ─────────────────────────────────────
+pyttsx3              # text-to-speech
+SpeechRecognition    # microphone input
+pyaudio              # audio backend for SpeechRecognition
