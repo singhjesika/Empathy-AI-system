@@ -1,7 +1,4 @@
-"""
-burnout_detector.py
-Detects burnout risk from the user's mood history stored in SQLite.
-"""
+
 
 import json
 import logging

@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════
-// CONSTANTS & GLOBALS
-// ═══════════════════════════════════════════════════════════════
+
 
 const EMOTION_MAP = {
   joy:{emoji:"😄",label:"Joyful"}, sadness:{emoji:"😢",label:"Sad"}, anger:{emoji:"😠",label:"Angry"},
@@ -9,6 +7,18 @@ const EMOTION_MAP = {
   stress:{emoji:"😤",label:"Stressed"}, health:{emoji:"💪",label:"Health"}, greeting:{emoji:"👋",label:"Greeting"},
   farewell:{emoji:"👋",label:"Farewell"}, general:{emoji:"💬",label:"Chat"},
 };
+
+async function loadGroqConfig() {
+  try {
+    const res = await fetch("/api/config");
+    const data = await res.json();
+    GROQ_API_KEY = data.groq_api_key;
+    console.log("Groq key loaded");
+  } catch (err) {
+    console.error("Failed to load GROQ config:", err);
+  }
+}
+loadGroqConfig();
 
 const EMOTION_NORMALIZE = {
   joy:"joy",happy:"joy",happiness:"joy",joyful:"joy",excited:"anticipation",
@@ -24,9 +34,34 @@ const EMOTION_NORMALIZE = {
 };
 
 const EMOTION_COLORS = {
-  joy:"#FFD700",sadness:"#00BFFF",anger:"#FF4500",fear:"#9400D3",disgust:"#00FA9A",
-  surprise:"#00FFCC",trust:"#40E0D0",anticipation:"#BF5FFF",study:"#7CFF6B",
-  stress:"#FF8C00",health:"#20B2AA",greeting:"#ff6a9e",farewell:"#c084fc",general:"#7c6aff",
+  happy:        "#FFD700",
+  sad:          "#4FC3F7",
+  anxious:      "#AB47BC",
+  lonely:       "#5C6BC0",
+  stressed:     "#FF6D00",
+  angry:        "#FF1744",
+  confused:     "#FFA726",
+  hopeful:      "#69FF47",
+  excited:      "#F50057",
+  overwhelmed:  "#D500F9",
+  calm:         "#00E5FF",
+  motivated:    "#EEFF41",
+  joy:          "#FFD700",
+  sadness:      "#4FC3F7",
+  anger:        "#FF1744",
+  fear:         "#AB47BC",
+  disgust:      "#00E676",
+  surprise:     "#FF9100",
+  trust:        "#00BCD4",
+  anticipation: "#E040FB",
+  study:        "#69FF47",
+  stress:       "#FF6D00",
+  health:       "#1DE9B6",
+  greeting:     "#F48FB1",
+  farewell:     "#CE93D8",
+  general:      "#7C4DFF",
+  chat:         "#7C4DFF",
+  depressed:    "#5C6BC0",
 };
 
 const EMOTION_EMOJI_MAP = {
@@ -46,11 +81,85 @@ let recognition        = null;
 let voiceOn            = false;
 let deferredPwaPrompt  = null;
 let breatheTimer       = null;
-let GROQ_API_KEY       = localStorage.getItem("groq_api_key") 
+let GROQ_API_KEY       = "";
 let doughnutChartInst  = null;
 let lineChartInst      = null;
 
-// ─── INIT ─────────────────────────────────────────────────────────
+
+const HEART_EMOTION_PALETTE = {
+  joy:         { outer:"rgba(255,200,30,.35)",  mid:"rgba(255,230,80,.60)",  core:"rgba(255,245,180,.95)", spark:"rgba(255,255,200,.98)", bg:["rgba(60,40,0,.28)","rgba(30,20,0,.14)"],  speed:"fast"   },
+  sadness:     { outer:"rgba(40,100,220,.32)",  mid:"rgba(80,150,255,.55)",  core:"rgba(180,210,255,.90)", spark:"rgba(200,225,255,.95)", bg:["rgba(0,20,80,.30)","rgba(0,10,40,.15)"],  speed:"slow"   },
+  anger:       { outer:"rgba(220,30,30,.40)",   mid:"rgba(255,80,60,.60)",   core:"rgba(255,180,160,.92)", spark:"rgba(255,220,210,.98)", bg:["rgba(80,0,0,.35)","rgba(40,0,0,.18)"],   speed:"fast"   },
+  fear:        { outer:"rgba(130,40,200,.30)",  mid:"rgba(180,80,255,.50)",  core:"rgba(220,180,255,.88)", spark:"rgba(240,220,255,.95)", bg:["rgba(30,0,60,.28)","rgba(15,0,30,.14)"],  speed:"slow"   },
+  stress:      { outer:"rgba(220,100,20,.35)",  mid:"rgba(255,150,40,.55)",  core:"rgba(255,210,150,.90)", spark:"rgba(255,230,200,.96)", bg:["rgba(60,20,0,.28)","rgba(30,10,0,.14)"],  speed:"fast"   },
+  trust:       { outer:"rgba(20,140,200,.30)",  mid:"rgba(60,180,240,.52)",  core:"rgba(160,225,255,.88)", spark:"rgba(200,240,255,.95)", bg:["rgba(0,40,70,.26)","rgba(0,20,35,.13)"],  speed:"medium" },
+  anticipation:{ outer:"rgba(160,40,220,.32)",  mid:"rgba(200,80,255,.54)",  core:"rgba(235,180,255,.90)", spark:"rgba(245,210,255,.96)", bg:["rgba(50,0,80,.28)","rgba(25,0,40,.14)"],  speed:"medium" },
+  study:       { outer:"rgba(30,180,100,.30)",  mid:"rgba(60,220,140,.52)",  core:"rgba(160,255,200,.88)", spark:"rgba(200,255,225,.95)", bg:["rgba(0,50,20,.26)","rgba(0,25,10,.13)"],  speed:"medium" },
+  disgust:     { outer:"rgba(20,130,80,.28)",   mid:"rgba(40,170,110,.50)",  core:"rgba(140,230,180,.86)", spark:"rgba(180,245,210,.93)", bg:["rgba(0,40,20,.24)","rgba(0,20,10,.12)"],  speed:"medium" },
+  surprise:    { outer:"rgba(20,180,200,.32)",  mid:"rgba(40,220,240,.54)",  core:"rgba(160,245,255,.90)", spark:"rgba(200,250,255,.96)", bg:["rgba(0,50,60,.26)","rgba(0,25,30,.13)"],  speed:"fast"   },
+  health:      { outer:"rgba(30,200,140,.30)",  mid:"rgba(60,240,170,.52)",  core:"rgba(160,255,220,.88)", spark:"rgba(200,255,235,.95)", bg:["rgba(0,60,35,.26)","rgba(0,30,18,.13)"],  speed:"medium" },
+  general:     { outer:"rgba(90,120,255,.30)",  mid:"rgba(160,195,255,.55)", core:"rgba(225,238,255,.92)", spark:"rgba(255,255,255,.95)", bg:["rgba(20,40,120,.22)","rgba(50,70,180,.12)"], speed:"medium" },
+};
+
+
+const HEART_SPEED_MAP = { fast:"2.2s", medium:"4.5s", slow:"7s" };
+
+
+function applyHeartEmotion(emotion) {
+  const key     = EMOTION_NORMALIZE[emotion] || emotion;
+  const palette = HEART_EMOTION_PALETTE[key] || HEART_EMOTION_PALETTE.general;
+
+  const outer  = document.querySelector(".ht-outer");
+  const mid    = document.querySelector(".ht-mid");
+  const core   = document.querySelector(".ht-core");
+  const sparks = document.querySelectorAll(".ht-spark");
+  const panel  = document.getElementById("messagesPanel");
+
+  if (!outer) return;  
+
+  const dur = HEART_SPEED_MAP[palette.speed] || "4.5s";
+
+  // stroke colours
+  outer.style.stroke = palette.outer;
+  mid.style.stroke   = palette.mid;
+  core.style.stroke  = palette.core;
+  sparks.forEach(s => s.style.fill = palette.spark);
+
+  
+  outer.style.animationDuration = `3.4s, ${dur}`;
+  mid.style.animationDuration   = `3.4s, ${dur}`;
+  core.style.animationDuration  = `3.4s, ${dur}`;
+
+}
+
+function heartBeat() {
+  const paths = document.querySelectorAll(".ht-outer,.ht-mid,.ht-core");
+  if (!paths.length) return;
+  paths.forEach(p => {
+    p.style.transition = "stroke-width .12s ease-out";
+    const base = p.classList.contains("ht-outer") ? 11
+               : p.classList.contains("ht-mid")   ? 5 : 1.5;
+    p.style.strokeWidth = (base * 1.9) + "px";
+    setTimeout(() => { p.style.strokeWidth = ""; p.style.transition = "stroke-width .4s ease-in"; }, 160);
+  });
+}
+
+function heartRedraw() {
+  const paths = document.querySelectorAll(".ht-outer,.ht-mid,.ht-core");
+  const sparks = document.querySelectorAll(".ht-spark");
+  if (!paths.length) return;
+
+  // clone → replace to restart CSS animations
+  paths.forEach(p => {
+    const clone = p.cloneNode(true);
+    p.parentNode.replaceChild(clone, p);
+  });
+  sparks.forEach(s => {
+    const clone = s.cloneNode(true);
+    s.parentNode.replaceChild(clone, s);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("giphyBox").style.display = "none";
   document.getElementById("nameInput").addEventListener("keydown", e => {
@@ -75,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("load", initAura);
 });
 
-// ─── PWA ──────────────────────────────────────────────────────────
+
 function installPWA() {
   if (!deferredPwaPrompt) return;
   deferredPwaPrompt.prompt();
@@ -90,7 +199,6 @@ function dismissPWA() {
   document.getElementById("pwaBanner").classList.remove("visible");
 }
 
-// ─── GIPHY ────────────────────────────────────────────────────────
 function saveGiphyKey() {
   const k = document.getElementById("giphyKeyInput").value.trim();
   if (k) {
@@ -100,7 +208,6 @@ function saveGiphyKey() {
   }
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────────
 async function doLogin() {
   const name = document.getElementById("nameInput").value.trim();
   if (!name) { document.getElementById("nameInput").focus(); return; }
@@ -145,7 +252,7 @@ async function doLogin() {
   }
 }
 
-// ─── SEND MESSAGE ─────────────────────────────────────────────────
+
 async function sendMessage() {
   const input = document.getElementById("chatInput");
   const text  = input.value.trim();
@@ -180,7 +287,13 @@ async function sendMessage() {
     document.getElementById("modeBadge").textContent  = data.response_mode === "groq" ? "Groq AI" : "Fallback";
     document.getElementById("modeBadge").className    = "mode-badge " + (data.response_mode === "groq" ? "mode-groq" : "mode-fallback");
 
-    if (data.emotion) triggerAura(data.emotion);
+    
+    if (data.emotion) {
+      applyHeartEmotion(data.emotion);
+      heartBeat();
+      triggerAura(data.emotion);
+    }
+
     if (voiceOn) speak(data.response);
     if (data.emotion && data.emotion !== "general") saveMem(data.emotion, text, data.response);
     updateWeather(data.emotion);
@@ -193,7 +306,7 @@ async function sendMessage() {
   document.getElementById("sendBtn").disabled = false;
 }
 
-// ─── ADD MESSAGE ──────────────────────────────────────────────────
+
 function addMessage(role, text, emotion, xp) {
   const panel = document.getElementById("messagesPanel");
   const row   = document.createElement("div");
@@ -209,7 +322,7 @@ function addMessage(role, text, emotion, xp) {
   panel.scrollTop = panel.scrollHeight;
 }
 
-// ─── INPUT HELPERS ────────────────────────────────────────────────
+
 function handleKey(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
@@ -219,7 +332,6 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 110) + "px";
 }
 
-// ─── PERSONALITY ──────────────────────────────────────────────────
 async function setPersonality(mode) {
   if (!currentUser) return;
   try {
@@ -236,7 +348,7 @@ async function setPersonality(mode) {
   } catch(e) {}
 }
 
-// ─── VOICE ────────────────────────────────────────────────────────
+
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -278,15 +390,14 @@ function toggleMic() {
   btn.classList.add("active");
 }
 
-// ─── HELPERS ──────────────────────────────────────────────────────
 function detectEmotionFromText(text) {
   const t = text.toLowerCase();
-  if (/happy|joy|great|amazing/.test(t))      return "joy";
-  if (/sad|cry|depressed|lonely/.test(t))     return "sadness";
-  if (/angry|frustrated|mad/.test(t))         return "anger";
-  if (/scared|afraid|anxious|worried/.test(t))return "fear";
-  if (/stressed|overwhelmed/.test(t))         return "stress";
-  if (/study|exam|homework/.test(t))          return "study";
+  if (/happy|joy|great|amazing/.test(t))       return "joy";
+  if (/sad|cry|depressed|lonely/.test(t))      return "sadness";
+  if (/angry|frustrated|mad/.test(t))          return "anger";
+  if (/scared|afraid|anxious|worried/.test(t)) return "fear";
+  if (/stressed|overwhelmed/.test(t))          return "stress";
+  if (/study|exam|homework/.test(t))           return "study";
   return "general";
 }
 
@@ -346,7 +457,7 @@ async function loadRiskData() {
 
     const level = (risk.level || "LOW").toUpperCase();
     const badge = document.getElementById("riskBadge");
-    badge.className  = "risk-badge risk-" + level;
+    badge.className   = "risk-badge risk-" + level;
     badge.textContent = "● " + level;
 
     const arrows = {improving:"↑", stable:"→", worsening:"↓"};
@@ -360,7 +471,6 @@ async function loadRiskData() {
   } catch(e) {}
 }
 
-// ─── AURA CANVAS ──────────────────────────────────────────────────
 const AURA_CONFIG = {
   joy:        {bg:["#1a1200","#2a1f00"], particles:"confetti", colors:["#FFD700","#ff6a9e","#7c6aff","#4ade80","#fbbf24"], count:90,  speed:1.4},
   sadness:    {bg:["#000a1a","#000f2a"], particles:"rain",     colors:["#00BFFF","#1E90FF","#87CEEB"],                    count:120, speed:2.5},
@@ -453,11 +563,10 @@ function animateAura(config) {
   auraAnimFrame = requestAnimationFrame(() => animateAura(config));
 }
 
-// ─── BREATHING EXERCISE ───────────────────────────────────────────
 const BREATHE_PHASES       = [{name:"Inhale",duration:4},{name:"Hold",duration:4},{name:"Exhale",duration:4},{name:"Hold",duration:4}];
 const BREATHE_TOTAL_CYCLES = 4;
-let breatheCycle    = 0;
-let breathePhaseIdx = 0;
+let breatheCycle     = 0;
+let breathePhaseIdx  = 0;
 let breatheTickCount = 0;
 
 function startBreathe() {

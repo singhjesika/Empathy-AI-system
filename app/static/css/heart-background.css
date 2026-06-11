@@ -1,0 +1,266 @@
+
+.heart-bg-svg path,
+.panel-heart-bg path,
+.login-heart-bg path {
+  fill: none !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+.heart-bg-svg,
+.panel-heart-bg,
+.login-heart-bg {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: clamp(300px, 70%, 560px) !important;
+  height: auto !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+
+.ht-outer {
+  fill: none !important;
+  stroke-width: 5;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0s;
+}
+
+.ht-mid {
+  fill: none !important;
+  stroke-width: 2.5;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.08s;
+}
+
+.ht-core {
+  fill: none !important;
+  stroke-width: 0.9;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.16s;
+}
+
+.ht-spark {
+  opacity: 0;
+}
+.ht-spark-top {
+  animation: htSpark 5s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.ht-spark-bot {
+  animation: htSpark 5s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+
+@keyframes htDraw {
+  0%   { stroke-dashoffset: 1446; opacity: 0; }
+  6%   { opacity: 0.9; }
+  55%  { stroke-dashoffset: 0;    opacity: 1; }
+  75%  { stroke-dashoffset: 0;    opacity: 0.6; }
+  92%  { stroke-dashoffset: 0;    opacity: 0; }
+  100% { stroke-dashoffset: 0;    opacity: 0; }
+}
+
+@keyframes htSpark {
+  0%   { opacity: 0;   r: 2; }
+  6%   { opacity: 1;   r: 9; }
+  18%  { opacity: 0.8; r: 4; }
+  55%  { opacity: 0.5; r: 5; }
+  75%  { opacity: 0;   r: 2; }
+  100% { opacity: 0; }
+}
+
+
+.panel:not(.visible) .ht-outer,
+.panel:not(.visible) .ht-mid,
+.panel:not(.visible) .ht-core,
+.panel:not(.visible) .ht-spark {
+  animation-play-state: paused;
+}
+.panel.visible .ht-outer,
+.panel.visible .ht-mid,
+.panel.visible .ht-core,
+.panel.visible .ht-spark {
+  animation-play-state: running;
+}
+
+.panel { position: relative; overflow: hidden; }
+
+#messagesPanel     { background: radial-gradient(ellipse at 50% 45%, #040d1c 0%, #000 100%); }
+#historyPanel      { background: radial-gradient(ellipse at 30% 30%, #0c0418 0%, #000 100%); }
+#chartPanel        { background: radial-gradient(ellipse at 65% 60%, #130900 0%, #000 100%); }
+#calendarPanel     { background: radial-gradient(ellipse at 50% 70%, #17000f 0%, #000 100%); }
+#journalPanel      { background: radial-gradient(ellipse at 20% 50%, #001512 0%, #000 100%); }
+#weeklyPanel       { background: radial-gradient(ellipse at 60% 20%, #05071a 0%, #000 100%); }
+#forecastPanel     { background: radial-gradient(ellipse at 40% 60%, #0e0219 0%, #000 100%); }
+#dnaPanel          { background: radial-gradient(ellipse at 75% 35%, #071300 0%, #000 100%); }
+#memoryPanel       { background: radial-gradient(ellipse at 25% 65%, #001827 0%, #000 100%); }
+#avatarPanel       { background: radial-gradient(ellipse at 55% 45%, #170011 0%, #000 100%); }
+#quotePanel        { background: radial-gradient(ellipse at 45% 55%, #180600 0%, #000 100%); }
+#relationshipPanel { background: radial-gradient(ellipse at 35% 40%, #180000 0%, #000 100%); }
+#burnoutPanel      { background: radial-gradient(ellipse at 65% 55%, #170800 0%, #000 100%); }
+#careerPanel       { background: radial-gradient(ellipse at 50% 30%, #171100 0%, #000 100%); }
+#timemachinePanel  { background: radial-gradient(ellipse at 30% 70%, #001716 0%, #000 100%); }
+#digitaltwinPanel  { background: radial-gradient(ellipse at 60% 40%, #04001b 0%, #000 100%); }
+
+
+
+#messagesPanel .heart-bg-svg .ht-outer { stroke: #0066ff; }
+#messagesPanel .heart-bg-svg .ht-mid   { stroke: #4da6ff; }
+#messagesPanel .heart-bg-svg .ht-core  { stroke: #d0eaff; }
+#messagesPanel .heart-bg-svg .ht-spark { fill: #d0eaff; }
+
+#historyPanel .panel-heart-bg .ht-outer { stroke: #7b1fa2; }
+#historyPanel .panel-heart-bg .ht-mid   { stroke: #ba68c8; }
+#historyPanel .panel-heart-bg .ht-core  { stroke: #f3e5f5; }
+#historyPanel .panel-heart-bg .ht-spark { fill: #f3e5f5; }
+
+#chartPanel .panel-heart-bg .ht-outer { stroke: #e65100; }
+#chartPanel .panel-heart-bg .ht-mid   { stroke: #ffa726; }
+#chartPanel .panel-heart-bg .ht-core  { stroke: #fff8e1; }
+#chartPanel .panel-heart-bg .ht-spark { fill: #fff8e1; }
+
+#calendarPanel .panel-heart-bg .ht-outer { stroke: #c2185b; }
+#calendarPanel .panel-heart-bg .ht-mid   { stroke: #f06292; }
+#calendarPanel .panel-heart-bg .ht-core  { stroke: #fce4ec; }
+#calendarPanel .panel-heart-bg .ht-spark { fill: #fce4ec; }
+
+#journalPanel .panel-heart-bg .ht-outer { stroke: #00796b; }
+#journalPanel .panel-heart-bg .ht-mid   { stroke: #4db6ac; }
+#journalPanel .panel-heart-bg .ht-core  { stroke: #e0f2f1; }
+#journalPanel .panel-heart-bg .ht-spark { fill: #e0f2f1; }
+
+
+#weeklyPanel .panel-heart-bg .ht-outer { stroke: #283593; }
+#weeklyPanel .panel-heart-bg .ht-mid   { stroke: #7986cb; }
+#weeklyPanel .panel-heart-bg .ht-core  { stroke: #e8eaf6; }
+#weeklyPanel .panel-heart-bg .ht-spark { fill: #e8eaf6; }
+
+#forecastPanel .panel-heart-bg .ht-outer { stroke: #4a148c; }
+#forecastPanel .panel-heart-bg .ht-mid   { stroke: #ab47bc; }
+#forecastPanel .panel-heart-bg .ht-core  { stroke: #f3e5f5; }
+#forecastPanel .panel-heart-bg .ht-spark { fill: #f3e5f5; }
+
+#dnaPanel .panel-heart-bg .ht-outer { stroke: #558b2f; }
+#dnaPanel .panel-heart-bg .ht-mid   { stroke: #aed581; }
+#dnaPanel .panel-heart-bg .ht-core  { stroke: #f1f8e9; }
+#dnaPanel .panel-heart-bg .ht-spark { fill: #f1f8e9; }
+
+#memoryPanel .panel-heart-bg .ht-outer { stroke: #01579b; }
+#memoryPanel .panel-heart-bg .ht-mid   { stroke: #4fc3f7; }
+#memoryPanel .panel-heart-bg .ht-core  { stroke: #e1f5fe; }
+#memoryPanel .panel-heart-bg .ht-spark { fill: #e1f5fe; }
+
+
+#avatarPanel .panel-heart-bg .ht-outer { stroke: #880e4f; }
+#avatarPanel .panel-heart-bg .ht-mid   { stroke: #f48fb1; }
+#avatarPanel .panel-heart-bg .ht-core  { stroke: #fce4ec; }
+#avatarPanel .panel-heart-bg .ht-spark { fill: #fce4ec; }
+
+#quotePanel .panel-heart-bg .ht-outer { stroke: #bf360c; }
+#quotePanel .panel-heart-bg .ht-mid   { stroke: #ff7043; }
+#quotePanel .panel-heart-bg .ht-core  { stroke: #fbe9e7; }
+#quotePanel .panel-heart-bg .ht-spark { fill: #fbe9e7; }
+
+
+#relationshipPanel .panel-heart-bg .ht-outer { stroke: #b71c1c; }
+#relationshipPanel .panel-heart-bg .ht-mid   { stroke: #ef5350; }
+#relationshipPanel .panel-heart-bg .ht-core  { stroke: #ffebee; }
+#relationshipPanel .panel-heart-bg .ht-spark { fill: #ffebee; }
+
+#burnoutPanel .panel-heart-bg .ht-outer { stroke: #e64a19; }
+#burnoutPanel .panel-heart-bg .ht-mid   { stroke: #ff7043; }
+#burnoutPanel .panel-heart-bg .ht-core  { stroke: #fbe9e7; }
+#burnoutPanel .panel-heart-bg .ht-spark { fill: #fbe9e7; }
+
+
+#careerPanel .panel-heart-bg .ht-outer { stroke: #f57f17; }
+#careerPanel .panel-heart-bg .ht-mid   { stroke: #ffca28; }
+#careerPanel .panel-heart-bg .ht-core  { stroke: #fffde7; }
+#careerPanel .panel-heart-bg .ht-spark { fill: #fffde7; }
+
+
+#timemachinePanel .panel-heart-bg .ht-outer { stroke: #006064; }
+#timemachinePanel .panel-heart-bg .ht-mid   { stroke: #26c6da; }
+#timemachinePanel .panel-heart-bg .ht-core  { stroke: #e0f7fa; }
+#timemachinePanel .panel-heart-bg .ht-spark { fill: #e0f7fa; }
+
+#digitaltwinPanel .panel-heart-bg .ht-outer { stroke: #1a237e; }
+#digitaltwinPanel .panel-heart-bg .ht-mid   { stroke: #7c4dff; }
+#digitaltwinPanel .panel-heart-bg .ht-core  { stroke: #ede7f6; }
+#digitaltwinPanel .panel-heart-bg .ht-spark { fill: #ede7f6; }
+
+.login-heart-bg {
+  position: absolute !important;
+  top: 42% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: clamp(280px, 65vw, 520px) !important;
+  height: auto !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+
+.login-heart-bg .ht-outer {
+  stroke: #0055ff;
+  stroke-width: 5;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.login-heart-bg .ht-mid {
+  stroke: #4d9fff;
+  stroke-width: 2.5;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.08s;
+}
+.login-heart-bg .ht-core {
+  stroke: #ffffff;
+  stroke-width: 0.9;
+  stroke-dasharray: 1446;
+  stroke-dashoffset: 1446;
+  opacity: 0;
+  animation: htDraw 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.16s;
+}
+.login-heart-bg .ht-spark { fill: #ffffff; }
+.login-heart-bg .ht-spark-top {
+  animation: htSpark 4.5s ease-in-out infinite;
+}
+.login-heart-bg .ht-spark-bot {
+  animation: htSpark 4.5s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+
+
+.login-screen {
+  background: radial-gradient(ellipse at 50% 38%, #050a1e 0%, #000 100%) !important;
+}
+
+
+@media (max-width: 600px) {
+  .heart-bg-svg,
+  .panel-heart-bg,
+  .login-heart-bg {
+    width: 88vw !important;
+    opacity: 0.8;
+  }
+}

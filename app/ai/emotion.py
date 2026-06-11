@@ -17,22 +17,72 @@ NRCLEX_MAP = {
     "anticipation": "anticipation",
 }
 
+from groq import Groq
+from app.config import GROQ_API_KEY
+
+client = Groq(api_key=GROQ_API_KEY)
+
 def detect_emotion(text: str) -> str:
-    if not EMOTION_AVAILABLE:
-        return "general"
     try:
-        obj = NRCLex(text)
-        scores = obj.raw_emotion_scores
-        if not scores:
-            return "general"
-        filtered = {
-            NRCLEX_MAP[k]: v
-            for k, v in scores.items()
-            if k in NRCLEX_MAP
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            temperature=0,
+            max_tokens=10,
+            messages=[
+                {
+                    "role": "system",
+                    "content": """
+You are an emotion analysis AI.
+
+Return ONLY ONE WORD from this list:
+
+happy
+sad
+anxious
+lonely
+stressed
+angry
+confused
+hopeful
+excited
+overwhelmed
+calm
+motivated
+
+No explanation.
+No punctuation.
+One word only.
+"""
+                },
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        )
+
+        emotion = response.choices[0].message.content.strip().lower()
+
+        allowed = {
+            "happy",
+            "sad",
+            "anxious",
+            "lonely",
+            "stressed",
+            "angry",
+            "confused",
+            "hopeful",
+            "excited",
+            "overwhelmed",
+            "calm",
+            "motivated",
         }
-        if not filtered:
-            return "general"
-        return max(filtered, key=filtered.get)
+
+        if emotion in allowed:
+            return emotion
+
+        return "general"
+
     except Exception:
         return "general"
 

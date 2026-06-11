@@ -1,0 +1,1075 @@
+
+.panel { position: relative; overflow: hidden; }
+.panel > * { position: relative; z-index: 1; }
+
+#messagesPanel {
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 100%, rgba(255,182,193,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 80%  80% at 15%  10%, rgba(255,105,135,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 60%  90% at 85%  5%,  rgba(255,182,193,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 40% at 50%  0%,  rgba(173,90,120,0.20)  0%, transparent 45%),
+    radial-gradient(ellipse 70%  50% at 30%  60%, rgba(220,80,110,0.10)  0%, transparent 50%),
+    linear-gradient(170deg,
+      #1a0812 0%,
+      #280d1a 18%,
+      #1f0f1e 38%,
+      #170a14 58%,
+      #110713 78%,
+      #0d050f 100%
+    );
+}
+
+#messagesPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 25% at 50% 105%,  rgba(255,200,160,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 15% at 50% 105%,  rgba(255,230,180,0.25) 0%, transparent 50%),
+    radial-gradient(circle 400px   at 50% 98%,    rgba(255,150,100,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: sakuraSun 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#messagesPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 20%, rgba(255,182,193,0.85) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 27% 8%,  rgba(255,160,180,0.70) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 43% 32%, rgba(255,200,210,0.60) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 60% 12%, rgba(255,140,170,0.80) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 75% 28%, rgba(255,180,200,0.55) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 88% 6%,  rgba(255,160,185,0.70) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 33% 55%, rgba(255,182,193,0.45) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 55% 45%, rgba(255,150,170,0.40) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 70% 60%, rgba(255,182,193,0.50) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 20% 70%, rgba(255,160,180,0.35) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 75%, rgba(255,140,165,0.40) 0%, transparent 100%);
+  pointer-events: none;
+  animation: petalDrift 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes sakuraSun {
+  0%   { opacity: 0.7; transform: scaleX(1); }
+  50%  { opacity: 1;   transform: scaleX(1.1); }
+  100% { opacity: 0.6; transform: scaleX(0.95); }
+}
+
+@keyframes petalDrift {
+  0%   { transform: translateY(0)    translateX(0)    rotate(0deg);   opacity: 0.8; }
+  33%  { transform: translateY(-18px) translateX(12px) rotate(3deg);  opacity: 1;   }
+  66%  { transform: translateY(8px)  translateX(-8px) rotate(-2deg); opacity: 0.7; }
+  100% { transform: translateY(-12px) translateX(6px)  rotate(2deg);  opacity: 0.9; }
+}
+
+#historyPanel {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(100,50,80,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 80%  60% at 20% 80%,  rgba(80,40,100,0.30) 0%, transparent 55%),
+    radial-gradient(ellipse 60%  40% at 80% 20%,  rgba(120,60,80,0.20) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 30% at 50% 50%,  rgba(60,40,80,0.25)  0%, transparent 60%),
+    radial-gradient(ellipse 50%  70% at 10% 50%,  rgba(150,80,100,0.15) 0%, transparent 55%),
+    linear-gradient(175deg,
+      #130a10 0%,
+      #1e0f18 20%,
+      #281525 40%,
+      #1a1228 60%,
+      #150f22 80%,
+      #0f0b1a 100%
+    );
+}
+
+#historyPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 52%,
+      transparent 52.5%,
+     rgba(80,60,200,0.04) 52.5%,
+     rgba(80,60,200,0.04) 53%
+    ),
+    radial-gradient(ellipse 90% 20% at 50% 62%, rgba(180,140,200,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 10% at 50% 68%, rgba(200,160,220,0.08) 0%, transparent 50%);
+  pointer-events: none;
+  animation: mistRoll 14s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#historyPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(3px 2px at 15% 72%, rgba(200,60,40,0.70)  0%, transparent 100%),
+    radial-gradient(4px 3px at 28% 80%, rgba(220,80,50,0.60)  0%, transparent 100%),
+    radial-gradient(2px 2px at 40% 68%, rgba(180,50,60,0.55)  0%, transparent 100%),
+    radial-gradient(5px 3px at 55% 76%, rgba(210,70,45,0.65)  0%, transparent 100%),
+    radial-gradient(3px 2px at 68% 82%, rgba(190,55,50,0.50)  0%, transparent 100%),
+    radial-gradient(4px 4px at 80% 74%, rgba(215,80,60,0.60)  0%, transparent 100%),
+    radial-gradient(2px 2px at 10% 85%, rgba(200,65,45,0.45)  0%, transparent 100%),
+    radial-gradient(3px 2px at 90% 88%, rgba(180,50,40,0.50)  0%, transparent 100%);
+  pointer-events: none;
+  animation: leavesSettle 10s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes mistRoll {
+  0%   { opacity: 0.6; transform: translateX(-15px); }
+  100% { opacity: 1;   transform: translateX(15px);  }
+}
+
+@keyframes leavesSettle {
+  0%,100% { transform: translateY(0);   }
+  50%     { transform: translateY(4px); }
+}
+
+#chartPanel {
+  background:
+    radial-gradient(ellipse 90%  60% at 50%  0%,  rgba(0,60,120,0.50)  0%, transparent 55%),
+    radial-gradient(ellipse 60%  80% at 80%  80%, rgba(0,100,140,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 50%  40% at 10%  40%, rgba(0,80,160,0.28)  0%, transparent 50%),
+    radial-gradient(ellipse 100% 30% at 50%  100%,rgba(0,50,100,0.40)  0%, transparent 55%),
+    linear-gradient(190deg,
+      #000814 0%,
+      #001025 18%,
+      #001a35 38%,
+      #001230 58%,
+      #000c20 78%,
+      #000610 100%
+    );
+}
+
+#chartPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 180px at 20% 30%,  rgba(0,220,255,0.10) 0%, transparent 70%),
+    radial-gradient(circle 120px at 65% 55%,  rgba(0,180,220,0.08) 0%, transparent 65%),
+    radial-gradient(circle 90px  at 80% 20%,  rgba(0,240,255,0.07) 0%, transparent 60%),
+    radial-gradient(circle 200px at 40% 80%,  rgba(0,160,200,0.09) 0%, transparent 70%),
+    radial-gradient(circle 150px at 90% 70%,  rgba(0,200,240,0.08) 0%, transparent 65%);
+  pointer-events: none;
+  animation: bioGlow 7s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#chartPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      170deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(0,180,255,0.04) 28px,
+      rgba(0,180,255,0.04) 30px
+    );
+  pointer-events: none;
+  animation: caustics 9s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes bioGlow {
+  0%   { opacity: 0.5; transform: scale(1);    }
+  50%  { opacity: 1;   transform: scale(1.06); }
+  100% { opacity: 0.7; transform: scale(0.97); }
+}
+
+@keyframes caustics {
+  0%   { opacity: 0.4; transform: skewX(0deg);   }
+  100% { opacity: 0.7; transform: skewX(1.5deg); }
+}
+
+#calendarPanel {
+  background:
+    radial-gradient(ellipse 100% 40% at 50%  0%,  rgba(180,100,220,0.28) 0%, transparent 50%),
+    radial-gradient(ellipse 80%  30% at 50%  5%,  rgba(255,180,80,0.18)  0%, transparent 45%),
+    radial-gradient(ellipse 60%  60% at 20%  60%, rgba(120,60,180,0.20)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  50% at 80%  70%, rgba(100,50,160,0.18)  0%, transparent 50%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(100,40,140,0.08) 0px,
+      rgba(100,40,140,0.08) 4px,
+      transparent 4px,
+      transparent 18px
+    ),
+    linear-gradient(175deg,
+      #1a0a2e 0%,
+      #250d3a 20%,
+      #1e1040 40%,
+      #180d30 60%,
+      #120820 80%,
+      #0d0618 100%
+    );
+}
+
+#calendarPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 15% at 50% 8%, rgba(255,200,100,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 8%  at 50% 5%, rgba(255,220,140,0.18) 0%, transparent 50%);
+  pointer-events: none;
+  animation: goldenHour 10s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#calendarPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 1.5px at 8%  55%, rgba(200,140,255,0.70) 0%, transparent 100%),
+    radial-gradient(2px   1px   at 18% 62%, rgba(180,120,240,0.55) 0%, transparent 100%),
+    radial-gradient(1px   2px   at 30% 58%, rgba(210,150,255,0.60) 0%, transparent 100%),
+    radial-gradient(2px   1.5px at 44% 65%, rgba(190,130,240,0.50) 0%, transparent 100%),
+    radial-gradient(1.5px 2px   at 58% 60%, rgba(200,140,255,0.55) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 70% 63%, rgba(180,120,235,0.45) 0%, transparent 100%),
+    radial-gradient(2px   1px   at 82% 58%, rgba(210,150,250,0.50) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 92% 66%, rgba(195,135,245,0.55) 0%, transparent 100%);
+  pointer-events: none;
+  animation: lavenderSway 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes goldenHour {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1;   }
+}
+
+@keyframes lavenderSway {
+  0%   { transform: translateX(-6px); opacity: 0.7; }
+  100% { transform: translateX(6px);  opacity: 1;   }
+}
+
+#journalPanel {
+  background:
+    radial-gradient(ellipse 70%  80% at 50%  -10%, rgba(100,200,80,0.22)  0%, transparent 55%),
+    radial-gradient(ellipse 50%  50% at 20%  20%,  rgba(60,160,60,0.18)   0%, transparent 50%),
+    radial-gradient(ellipse 40%  70% at 80%  30%,  rgba(80,180,70,0.15)   0%, transparent 50%),
+    radial-gradient(ellipse 80%  30% at 50%  90%,  rgba(40,120,40,0.20)   0%, transparent 50%),
+    radial-gradient(ellipse 60%  40% at 50%  50%,  rgba(120,200,80,0.08)  0%, transparent 55%),
+    linear-gradient(170deg,
+      #050e06 0%,
+      #0a1a0c 18%,
+      #0d1f10 38%,
+      #091808 58%,
+      #061208 78%,
+      #040c05 100%
+    );
+}
+
+#journalPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    conic-gradient(
+      from -10deg at 50% -5%,
+      transparent 0deg,
+      rgba(160,230,100,0.06) 3deg,
+      transparent 6deg,
+      rgba(140,220,90,0.05) 10deg,
+      transparent 13deg,
+      rgba(160,230,100,0.07) 18deg,
+      transparent 21deg,
+      rgba(120,200,80,0.05) 27deg,
+      transparent 30deg,
+      rgba(140,220,90,0.06) 36deg,
+      transparent 42deg
+    );
+  pointer-events: none;
+  animation: godrays 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#journalPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 25% at 50% 100%, rgba(160,230,130,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60%  12% at 30% 100%, rgba(140,210,110,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50%  10% at 75% 100%, rgba(150,220,120,0.07) 0%, transparent 50%);
+  pointer-events: none;
+  animation: forestMist 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes godrays {
+  0%   { opacity: 0.5; transform: rotate(-1deg); }
+  100% { opacity: 0.9; transform: rotate(1deg);  }
+}
+
+@keyframes forestMist {
+  0%   { opacity: 0.5; transform: translateX(-20px); }
+  100% { opacity: 1;   transform: translateX(20px);  }
+}
+
+#weeklyPanel {
+  background:
+    radial-gradient(ellipse 100% 45% at 50% 0%,   rgba(200,80,30,0.28)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  60% at 15%  50%,  rgba(180,60,20,0.22)  0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 85%  40%,  rgba(210,90,25,0.18)  0%, transparent 50%),
+    radial-gradient(ellipse 90%  25% at 50%  55%,  rgba(120,40,10,0.30)  0%, transparent 50%),
+    linear-gradient(175deg,
+      #180800 0%,
+      #220d02 18%,
+      #1c0d04 38%,
+      #150b04 58%,
+      #100803 78%,
+      #0c0502 100%
+    );
+}
+
+#weeklyPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 5px,
+      rgba(200,100,40,0.035) 5px,
+      rgba(200,100,40,0.035) 6px
+    ),
+    radial-gradient(ellipse 90% 15% at 50% 57%, rgba(180,80,30,0.15)  0%, transparent 60%),
+    radial-gradient(ellipse 50% 8%  at 50% 60%, rgba(200,100,40,0.10) 0%, transparent 50%);
+  pointer-events: none;
+  animation: lakeReflect 13s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#weeklyPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 60px  at 5%   15%, rgba(220,80,20,0.18)  0%, transparent 70%),
+    radial-gradient(circle 45px  at 92%  10%, rgba(200,100,30,0.15) 0%, transparent 65%),
+    radial-gradient(circle 80px  at 50%  5%,  rgba(240,120,40,0.12) 0%, transparent 70%),
+    radial-gradient(circle 35px  at 20%  90%, rgba(180,60,15,0.14)  0%, transparent 65%),
+    radial-gradient(circle 50px  at 78%  88%, rgba(210,90,25,0.12)  0%, transparent 65%);
+  pointer-events: none;
+  animation: autumnGlow 9s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes lakeReflect {
+  0%   { opacity: 0.5; transform: translateX(-8px); }
+  100% { opacity: 0.9; transform: translateX(8px);  }
+}
+
+@keyframes autumnGlow {
+  0%,100% { opacity: 0.7; }
+  50%     { opacity: 1;   }
+}
+
+#forecastPanel {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0%,   rgba(40,20,120,0.45)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  60% at 15%  30%,  rgba(20,10,100,0.35)  0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 85%  25%,  rgba(60,30,140,0.28)  0%, transparent 50%),
+    radial-gradient(ellipse 80%  30% at 50%  60%,  rgba(10,5,80,0.40)    0%, transparent 55%),
+    radial-gradient(ellipse 50%  80% at 50%  100%, rgba(0,20,60,0.35)    0%, transparent 55%),
+    linear-gradient(175deg,
+      #040210 0%,
+      #08041c 18%,
+      #0c0620 38%,
+      #060418 58%,
+      #040310 78%,
+      #02010a 100%
+    );
+}
+
+#forecastPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 30% 60% at 70% 20%, rgba(120,80,255,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 20% 40% at 25% 30%, rgba(100,60,220,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 15% 80% at 80% 0%,  rgba(140,100,255,0.10) 0%, transparent 65%);
+  pointer-events: none;
+  animation: stormLightning 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#forecastPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 15% at 50% 100%, rgba(80,120,200,0.20)  0%, transparent 60%),
+    radial-gradient(ellipse 60%  8%  at 30% 100%, rgba(100,140,220,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 50%  6%  at 75% 100%, rgba(90,130,210,0.10)  0%, transparent 50%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 22px,
+      rgba(60,80,160,0.04) 22px,
+      rgba(60,80,160,0.04) 24px
+    );
+  pointer-events: none;
+  animation: seaFoam 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes stormLightning {
+  0%,90%,100% { opacity: 0.6; }
+  92%          { opacity: 1.0; }
+  94%          { opacity: 0.5; }
+  96%          { opacity: 1.0; }
+}
+
+@keyframes seaFoam {
+  0%   { opacity: 0.5; transform: translateX(-12px); }
+  100% { opacity: 0.9; transform: translateX(12px);  }
+}
+
+#dnaPanel {
+  background:
+    radial-gradient(ellipse 80%  60% at 30%  80%, rgba(200,60,0,0.35)   0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 80%  60%, rgba(180,40,0,0.28)   0%, transparent 50%),
+    radial-gradient(ellipse 50%  40% at 15%  30%, rgba(220,80,0,0.20)   0%, transparent 50%),
+    radial-gradient(ellipse 70%  30% at 60%  20%, rgba(160,30,0,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 100% 20% at 50%  95%, rgba(240,100,0,0.30)  0%, transparent 55%),
+    linear-gradient(170deg,
+      #0e0400 0%,
+      #180800 18%,
+      #1a0900 38%,
+      #140600 58%,
+      #0e0400 78%,
+      #080200 100%
+    );
+}
+
+#dnaPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0px,
+      transparent 35px,
+      rgba(220,80,0,0.05) 35px,
+      rgba(220,80,0,0.05) 37px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 50px,
+      rgba(200,60,0,0.04) 50px,
+      rgba(200,60,0,0.04) 52px
+    );
+  pointer-events: none;
+  animation: lavaGlow 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#dnaPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 120px at 25% 90%, rgba(255,120,0,0.18) 0%, transparent 70%),
+    radial-gradient(circle 80px  at 70% 80%, rgba(240,100,0,0.14) 0%, transparent 65%),
+    radial-gradient(circle 60px  at 50% 95%, rgba(255,140,0,0.12) 0%, transparent 60%),
+    radial-gradient(circle 40px  at 10% 70%, rgba(220,80,0,0.10)  0%, transparent 55%),
+    radial-gradient(circle 55px  at 88% 65%, rgba(230,90,0,0.11)  0%, transparent 60%);
+  pointer-events: none;
+  animation: heatRise 7s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes lavaGlow {
+  0%   { opacity: 0.5; }
+  100% { opacity: 1;   }
+}
+
+@keyframes heatRise {
+  0%   { transform: translateY(0);   opacity: 0.6; }
+  100% { transform: translateY(-12px); opacity: 1; }
+}
+
+#memoryPanel {
+  background:
+    radial-gradient(ellipse 60%  60% at 70%  5%,  rgba(200,180,255,0.20) 0%, transparent 50%),
+    radial-gradient(ellipse 40%  30% at 70%  3%,  rgba(220,200,255,0.15) 0%, transparent 40%),
+    radial-gradient(ellipse 100% 40% at 50%  70%, rgba(180,140,100,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 70%  30% at 20%  80%, rgba(160,120,80,0.14)  0%, transparent 50%),
+    radial-gradient(ellipse 80%  25% at 80%  75%, rgba(170,130,90,0.12)  0%, transparent 50%),
+    linear-gradient(175deg,
+      #060410 0%,
+      #0c0820 18%,
+      #0e0a24 38%,
+      #0a0618 58%,
+      #060412 78%,
+      #03020c 100%
+    );
+}
+
+#memoryPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 200px at 70% 8%,  rgba(230,220,255,0.18) 0%, transparent 70%),
+    radial-gradient(circle 100px at 70% 8%,  rgba(240,235,255,0.25) 0%, transparent 55%),
+    radial-gradient(circle 50px  at 70% 8%,  rgba(255,250,255,0.40) 0%, transparent 40%);
+  pointer-events: none;
+  animation: moonHalo 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#memoryPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 140% 18% at 50% 85%, rgba(180,150,100,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 12% at 30% 88%, rgba(160,130,90,0.15)  0%, transparent 55%),
+    radial-gradient(ellipse 80%  10% at 75% 90%, rgba(170,140,95,0.12)  0%, transparent 50%);
+  pointer-events: none;
+  animation: duneDrift 16s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes moonHalo {
+  0%   { opacity: 0.7; transform: scale(1);    }
+  50%  { opacity: 1;   transform: scale(1.05); }
+  100% { opacity: 0.8; transform: scale(0.98); }
+}
+
+@keyframes duneDrift {
+  0%   { opacity: 0.7; transform: translateX(-10px); }
+  100% { opacity: 1;   transform: translateX(10px);  }
+}
+
+#avatarPanel {
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 0%,  rgba(0,200,100,0.22)  0%, transparent 55%),
+    radial-gradient(ellipse 80%  40% at 20% 15%, rgba(0,180,160,0.18)  0%, transparent 50%),
+    radial-gradient(ellipse 60%  50% at 80% 10%, rgba(60,0,200,0.20)   0%, transparent 50%),
+    radial-gradient(ellipse 70%  35% at 50% 25%, rgba(0,220,180,0.14)  0%, transparent 50%),
+    radial-gradient(ellipse 100% 30% at 50% 100%,rgba(0,20,10,0.50)    0%, transparent 55%),
+    linear-gradient(180deg,
+      #020c08 0%,
+      #041410 18%,
+      #051810 38%,
+      #041008 58%,
+      #030c06 78%,
+      #020804 100%
+    );
+}
+
+
+#avatarPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 200% 20% at 50%  8%,  rgba(0,230,140,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 150% 15% at 30%  12%, rgba(0,200,180,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 180% 18% at 70%  6%,  rgba(80,0,220,0.10)  0%, transparent 55%),
+    radial-gradient(ellipse 120% 12% at 50%  18%, rgba(0,240,160,0.10) 0%, transparent 50%);
+  pointer-events: none;
+  animation: auroraRipple 9s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#avatarPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 140% 15% at 50% 100%, rgba(180,220,255,0.10) 0%, transparent 55%),
+    radial-gradient(1px 1px at 10% 95%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 93%, rgba(255,255,255,0.50) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 96%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 94%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 97%, rgba(255,255,255,0.55) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes auroraRipple {
+  0%   { opacity: 0.5; transform: translateX(-30px) scaleY(1);    }
+  33%  { opacity: 0.9; transform: translateX(20px)  scaleY(1.05); }
+  66%  { opacity: 0.7; transform: translateX(-10px) scaleY(0.97); }
+  100% { opacity: 1;   transform: translateX(25px)  scaleY(1.03); }
+}
+
+#quotePanel {
+  background:
+    radial-gradient(ellipse 80%  60% at 60%  0%,  rgba(255,160,180,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 85%  30%, rgba(255,200,100,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 50%  60% at 10%  70%, rgba(220,100,130,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 70%  30% at 40%  90%, rgba(200,80,110,0.18)  0%, transparent 50%),
+    linear-gradient(165deg,
+      #1e0810 0%,
+      #280e18 20%,
+      #221020 40%,
+      #1a0c18 60%,
+      #140810 80%,
+      #0e0508 100%
+    );
+}
+
+#quotePanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 300px at 80% 10%,  rgba(255,220,120,0.18) 0%, transparent 65%),
+    radial-gradient(circle 150px at 80% 10%,  rgba(255,200,80,0.22)  0%, transparent 50%),
+    radial-gradient(circle 80px  at 80% 10%,  rgba(255,230,150,0.30) 0%, transparent 40%),
+    radial-gradient(ellipse 40% 20% at 80% 8%, rgba(255,240,180,0.15) 0%, transparent 55%);
+  pointer-events: none;
+  animation: morningLight 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#quotePanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(2px 2px at 15% 40%, rgba(255,255,255,0.80) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 28% 65%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 45% 30%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 55%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 72% 25%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 50%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 80%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(2px 2px at 52% 75%, rgba(255,255,255,0.55) 0%, transparent 100%);
+  pointer-events: none;
+  animation: dewSparkle 7s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes morningLight {
+  0%   { opacity: 0.6; transform: scale(1);    }
+  100% { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes dewSparkle {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.7; }
+}
+
+
+#relationshipPanel {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0%,  rgba(255,120,60,0.30)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  40% at 20% 20%, rgba(255,80,40,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 60%  50% at 80% 15%, rgba(255,160,80,0.18)  0%, transparent 50%),
+    radial-gradient(ellipse 80%  35% at 50% 55%, rgba(0,120,160,0.25)   0%, transparent 55%),
+    radial-gradient(ellipse 60%  40% at 30% 70%, rgba(0,100,140,0.20)   0%, transparent 50%),
+    linear-gradient(175deg,
+      #1a0800 0%,
+      #200e04 20%,
+      #1c1008 40%,
+      #0e1218 60%,
+      #081018 80%,
+      #040c14 100%
+    );
+}
+
+#relationshipPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 25% at 50% 10%, rgba(255,180,80,0.25)  0%, transparent 55%),
+    radial-gradient(circle 200px at 50% 5%,     rgba(255,140,60,0.20)  0%, transparent 65%),
+    radial-gradient(circle 100px at 50% 3%,     rgba(255,200,120,0.30) 0%, transparent 50%);
+  pointer-events: none;
+  animation: sunsetPulse 10s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#relationshipPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 7px,
+      rgba(0,180,220,0.04) 7px,
+      rgba(0,180,220,0.04) 8px
+    ),
+    radial-gradient(ellipse 100% 20% at 50% 62%, rgba(0,160,200,0.12) 0%, transparent 60%);
+  pointer-events: none;
+  animation: waterShimmer 9s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes sunsetPulse {
+  0%   { opacity: 0.7; }
+  100% { opacity: 1;   }
+}
+
+@keyframes waterShimmer {
+  0%   { opacity: 0.5; transform: translateX(-8px); }
+  100% { opacity: 0.9; transform: translateX(8px);  }
+}
+
+#burnoutPanel {
+  background:
+    radial-gradient(ellipse 80%  60% at 40%  85%, rgba(220,60,0,0.35)   0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 80%  70%, rgba(180,40,0,0.28)   0%, transparent 50%),
+    radial-gradient(ellipse 70%  40% at 20%  60%, rgba(200,50,0,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 100% 30% at 50%  0%,  rgba(50,20,20,0.40)   0%, transparent 55%),
+    radial-gradient(ellipse 50%  60% at 50%  50%, rgba(140,20,0,0.15)   0%, transparent 55%),
+    linear-gradient(175deg,
+      #0f0200 0%,
+      #180500 18%,
+      #1a0600 38%,
+      #140300 58%,
+      #0e0200 78%,
+      #080100 100%
+    );
+}
+
+#burnoutPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 80px  at 20% 80%, rgba(255,80,0,0.22)  0%, transparent 65%),
+    radial-gradient(circle 50px  at 55% 90%, rgba(240,60,0,0.18)  0%, transparent 60%),
+    radial-gradient(circle 60px  at 80% 75%, rgba(250,70,0,0.16)  0%, transparent 60%),
+    radial-gradient(circle 40px  at 10% 95%, rgba(220,50,0,0.14)  0%, transparent 55%),
+    radial-gradient(circle 35px  at 90% 88%, rgba(235,65,0,0.12)  0%, transparent 55%);
+  pointer-events: none;
+  animation: emberGlow 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#burnoutPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      110deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(180,40,0,0.06) 28px,
+      rgba(180,40,0,0.06) 30px
+    ),
+    repeating-linear-gradient(
+      70deg,
+      transparent 0px,
+      transparent 42px,
+      rgba(160,30,0,0.05) 42px,
+      rgba(160,30,0,0.05) 44px
+    );
+  pointer-events: none;
+  animation: crackPulse 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes emberGlow {
+  0%   { opacity: 0.5; transform: translateY(0);   }
+  100% { opacity: 1;   transform: translateY(-10px); }
+}
+
+@keyframes crackPulse {
+  0%   { opacity: 0.5; }
+  100% { opacity: 1;   }
+}
+
+#careerPanel {
+  background:
+    radial-gradient(ellipse 100% 45% at 50% 0%,  rgba(255,180,60,0.28)  0%, transparent 55%),
+    radial-gradient(ellipse 60%  40% at 20% 30%, rgba(0,100,180,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 70%  50% at 80% 25%, rgba(0,80,160,0.18)    0%, transparent 50%),
+    radial-gradient(ellipse 80%  35% at 50% 60%, rgba(40,60,100,0.25)   0%, transparent 55%),
+    radial-gradient(ellipse 50%  70% at 50% 100%,rgba(20,40,80,0.35)    0%, transparent 55%),
+    linear-gradient(175deg,
+      #06090f 0%,
+      #0a1020 18%,
+      #0c1428 38%,
+      #081018 58%,
+      #060c14 78%,
+      #04080e 100%
+    );
+}
+
+#careerPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 18% at 50% 5%, rgba(255,200,80,0.25)   0%, transparent 55%),
+    radial-gradient(circle 180px at 50% 3%,    rgba(255,180,60,0.22)   0%, transparent 65%),
+    radial-gradient(circle 80px  at 50% 2%,    rgba(255,220,120,0.35)  0%, transparent 50%),
+    radial-gradient(circle 30px  at 50% 1%,    rgba(255,240,200,0.55)  0%, transparent 40%);
+  pointer-events: none;
+  animation: alpineSunrise 14s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+#careerPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 12% at 50% 40%, rgba(200,220,255,0.12) 0%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 20% 42%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 35% 38%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 52% 44%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 68% 40%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 80% 43%, rgba(255,255,255,0.65) 0%, transparent 100%);
+  pointer-events: none;
+  animation: snowSparkle 10s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes alpineSunrise {
+  0%   { opacity: 0.6; transform: scale(1);    }
+  100% { opacity: 1;   transform: scale(1.04); }
+}
+
+@keyframes snowSparkle {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.7; }
+}
+
+
+#timemachinePanel {
+  background:
+    radial-gradient(ellipse 90%  70% at 30%  20%, rgba(100,20,180,0.35)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  60% at 75%  40%, rgba(180,80,20,0.28)   0%, transparent 50%),
+    radial-gradient(ellipse 60%  50% at 50%  80%, rgba(60,10,120,0.30)   0%, transparent 50%),
+    radial-gradient(ellipse 80%  40% at 10%  70%, rgba(20,60,160,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 50%  80% at 90%  60%, rgba(140,60,20,0.18)   0%, transparent 55%),
+    linear-gradient(160deg,
+      #04020c 0%,
+      #080416 18%,
+      #0a0518 38%,
+      #060310 58%,
+      #04020e 78%,
+      #020108 100%
+    );
+}
+
+
+#timemachinePanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 250px at 25% 25%, rgba(120,30,200,0.18) 0%, transparent 70%),
+    radial-gradient(circle 180px at 70% 45%, rgba(200,90,20,0.14)  0%, transparent 65%),
+    radial-gradient(circle 150px at 50% 70%, rgba(80,15,160,0.16)  0%, transparent 65%),
+    radial-gradient(circle 200px at 85% 20%, rgba(160,70,10,0.12)  0%, transparent 65%);
+  pointer-events: none;
+  animation: nebulaBreath 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+
+#timemachinePanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 8%  12%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 28%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 38% 8%,  rgba(255,255,255,0.90) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 22%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 5%,  rgba(255,255,255,0.80) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 18%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 32%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px 1px at 12% 48%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 55%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px 1px at 58% 42%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 58%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 50%, rgba(255,255,255,0.50) 0%, transparent 100%),
+    radial-gradient(1px 1px at 18% 75%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(2px 2px at 44% 82%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1px 1px at 62% 78%, rgba(255,255,255,0.50) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 82% 72%, rgba(255,255,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 88%, rgba(255,255,255,0.55) 0%, transparent 100%);
+  pointer-events: none;
+  animation: starField 15s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes nebulaBreath {
+  0%   { opacity: 0.5; transform: scale(1);    }
+  50%  { opacity: 0.9; transform: scale(1.06); }
+  100% { opacity: 0.7; transform: scale(0.97); }
+}
+
+@keyframes starField {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.8; }
+}
+
+
+#digitaltwinPanel {
+  background:
+    radial-gradient(ellipse 80%  60% at 50%  0%,  rgba(60,20,180,0.40)   0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 20%  15%, rgba(20,10,150,0.30)   0%, transparent 50%),
+    radial-gradient(ellipse 50%  60% at 80%  10%, rgba(80,30,200,0.28)   0%, transparent 50%),
+    radial-gradient(ellipse 70%  25% at 50%  48%, rgba(30,10,100,0.35)   0%, transparent 50%),
+    radial-gradient(ellipse 100% 30% at 50%  55%, rgba(40,20,120,0.28)   0%, transparent 55%),
+    radial-gradient(ellipse 60%  50% at 25%  70%, rgba(0,40,80,0.25)     0%, transparent 50%),
+    radial-gradient(ellipse 50%  45% at 80%  75%, rgba(0,30,70,0.22)     0%, transparent 50%),
+    linear-gradient(180deg,
+      #030108 0%,
+      #060214 18%,
+      #080318 38%,
+      #050210 58%,
+      #03010c 78%,
+      #020108 100%
+    );
+}
+
+#digitaltwinPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 50% 18%, rgba(120,60,255,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 20% at 30% 22%, rgba(80,40,200,0.16)  0%, transparent 55%),
+    radial-gradient(ellipse 35% 25% at 70% 15%, rgba(140,80,255,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 25% 15% at 50% 12%, rgba(200,160,255,0.18) 0%, transparent 50%);
+  pointer-events: none;
+  animation: galaxyCore 13s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+
+#digitaltwinPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* Stars in upper half */
+    radial-gradient(1px 1px at 5%   5%,  rgba(255,255,255,0.90) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 10%, rgba(200,180,255,0.80) 0%, transparent 100%),
+    radial-gradient(1px 1px at 28%  3%,  rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(2px 2px at 40%  8%,  rgba(180,160,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55%  4%,  rgba(255,255,255,0.88) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 68% 12%, rgba(200,200,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px 1px at 82%  6%,  rgba(255,255,255,0.80) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 14%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 10% 22%, rgba(160,140,255,0.60) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 18%, rgba(255,255,255,0.70) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 75% 20%, rgba(200,180,255,0.60) 0%, transparent 100%),
+    /* Reflection ripples in lower half */
+    repeating-linear-gradient(
+      180deg,
+      transparent 52%,
+      transparent calc(52% + 5px),
+      rgba(80,60,200,0.04) calc(52% + 5px),
+      rgba(80,60,200,0.04) calc(52% + 6px)
+    ),
+    radial-gradient(ellipse 90% 10% at 50% 52%, rgba(100,80,220,0.12) 0%, transparent 60%);
+  pointer-events: none;
+  animation: lakeStarReflect 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes galaxyCore {
+  0%   { opacity: 0.6; transform: scale(1); }
+  50%  { opacity: 1;   transform: scale(1.04); }
+  100% { opacity: 0.8; transform: scale(0.98); }
+}
+
+@keyframes lakeStarReflect {
+  0%   { opacity: 0.8; transform: translateX(-6px); }
+  100% { opacity: 1;   transform: translateX(6px);  }
+}
+
+
+#analyticsPanel,
+#moodPanel {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0%,  rgba(40,15,120,0.38)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  60% at 15% 30%, rgba(20,8,90,0.28)    0%, transparent 50%),
+    radial-gradient(ellipse 60%  50% at 85% 25%, rgba(50,20,130,0.24)  0%, transparent 50%),
+    radial-gradient(ellipse 80%  30% at 50% 65%, rgba(30,60,20,0.22)   0%, transparent 50%),
+    radial-gradient(ellipse 60%  40% at 30% 80%, rgba(20,50,15,0.18)   0%, transparent 50%),
+    linear-gradient(175deg,
+      #04030e 0%,
+      #060518 18%,
+      #08061c 38%,
+      #060414 58%,
+      #040310 78%,
+      #02010a 100%
+    );
+}
+
+#analyticsPanel::before,
+#moodPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 15% at 50% 62%, rgba(40,80,30,0.18)  0%, transparent 60%),
+    radial-gradient(ellipse 80%  10% at 30% 65%, rgba(30,60,20,0.12)  0%, transparent 55%),
+    radial-gradient(ellipse 70%  8%  at 75% 63%, rgba(35,70,25,0.10)  0%, transparent 50%);
+  pointer-events: none;
+  animation: meadowBreeze 14s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+/* Fireflies */
+#analyticsPanel::after,
+#moodPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(3px 3px at 12% 58%, rgba(200,255,100,0.75) 0%, transparent 100%),
+    radial-gradient(2px 2px at 25% 65%, rgba(180,255,80,0.60)  0%, transparent 100%),
+    radial-gradient(3px 3px at 40% 60%, rgba(220,255,120,0.70) 0%, transparent 100%),
+    radial-gradient(2px 2px at 55% 68%, rgba(200,250,90,0.55)  0%, transparent 100%),
+    radial-gradient(3px 3px at 68% 62%, rgba(210,255,110,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 80% 66%, rgba(190,240,80,0.60)  0%, transparent 100%),
+    radial-gradient(2px 2px at 92% 58%, rgba(200,255,100,0.55) 0%, transparent 100%),
+    radial-gradient(2px 2px at 18% 72%, rgba(180,250,90,0.50)  0%, transparent 100%),
+    radial-gradient(3px 3px at 45% 75%, rgba(210,255,110,0.55) 0%, transparent 100%),
+    radial-gradient(2px 2px at 72% 78%, rgba(195,245,85,0.45)  0%, transparent 100%);
+  pointer-events: none;
+  animation: fireflies 5s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes meadowBreeze {
+  0%   { opacity: 0.5; transform: translateX(-12px); }
+  100% { opacity: 0.9; transform: translateX(12px);  }
+}
+
+@keyframes fireflies {
+  0%   { opacity: 0.4; transform: translateY(0)    translateX(0); }
+  25%  { opacity: 0.9; transform: translateY(-8px) translateX(5px); }
+  50%  { opacity: 0.6; transform: translateY(4px)  translateX(-4px); }
+  75%  { opacity: 1;   transform: translateY(-5px) translateX(8px); }
+  100% { opacity: 0.5; transform: translateY(3px)  translateX(-6px); }
+}
+

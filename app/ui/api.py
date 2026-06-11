@@ -26,6 +26,8 @@ from app.services.relationship_analyzer import analyze_relationship
 from app.services.burnout_detector import detect_burnout
 from app.services.career_coach import get_career_suggestions
 from app.services.forecast_service import generate_forecast
+from app.services.time_machine import generate_time_machine, chat_with_future_self
+from app.services.digital_twin import build_digital_twin, get_live_twin_warning
 from app.services.xp_service import get_level
 from app.utils.helpers import get_daily_quote
 from app.config import XP_PER_SESSION, GROQ_API_KEY, GROQ_MODEL, PERSONALITY_MODES
@@ -36,22 +38,18 @@ from app.ai.recommendations import get_topic_intelligence
 logger = logging.getLogger(__name__)
 
 
-# ── Standardized response helpers ───────────────────────────────────────────
+# ── Standardized response helpers ────────────────────────────────────────────
 def ok(data: dict | list, message: str = "Success") -> JSONResponse:
-    """Always return consistent success shape."""
     return JSONResponse({"status": "success", "message": message, "data": data})
 
-
 def err(message: str, code: int = 500) -> JSONResponse:
-    """Always return consistent error shape — never expose raw exceptions."""
     logger.error(f"API error [{code}]: {message}")
     return JSONResponse({"status": "error", "message": message, "data": None}, status_code=code)
 
 
-# ── Lifespan (replaces deprecated @app.on_event) ────────────────────────────
+# ── Lifespan ─────────────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
     init_db()
     conn = get_connection()
     conn.execute("""
@@ -68,18 +66,30 @@ async def lifespan(app: FastAPI):
     conn.close()
     logger.info("✅ Database initialised")
     yield
-    # Shutdown (nothing needed yet)
 
 
 app = FastAPI(title="Empathy AI Assistant", lifespan=lifespan)
 
-BASE_DIR      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEMPLATES_DIR = os.path.join(BASE_DIR, "app", "templates")
-templates     = Jinja2Templates(directory=TEMPLATES_DIR)
+# ── PATH RESOLUTION (FIXED) ───────────────────────────────────────────────────
+# __file__  = <ROOT>/app/ui/api.py
+# BASE_DIR  = <ROOT>/                      (3 levels up)
+# STATIC    = <ROOT>/static/
+# TEMPLATES = <ROOT>/app/templates/
+#
+# BUG WAS: StaticFiles used dirname x2 → landed in app/ not ROOT/
+# FIX:     StaticFiles now uses BASE_DIR (dirname x3) like templates does
 
-static_path = os.path.join(BASE_DIR, "app", "static")
-if os.path.exists(static_path):
-    app.mount("/static", StaticFiles(directory=static_path), name="static")
+BASE_DIR      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+STATIC_DIR = os.path.join(BASE_DIR, "app", "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "app", "templates")
+
+# Debug output so you can confirm paths on startup
+logger.info(f"BASE_DIR:      {BASE_DIR}")
+logger.info(f"STATIC_DIR:    {STATIC_DIR}  — exists: {os.path.exists(STATIC_DIR)}")
+logger.info(f"TEMPLATES_DIR: {TEMPLATES_DIR} — exists: {os.path.exists(TEMPLATES_DIR)}")
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 
 def _render(template_name: str, request: Request, context: dict = {}):
@@ -89,7 +99,7 @@ def _render(template_name: str, request: Request, context: dict = {}):
     return templates.TemplateResponse(template_name, {"request": request, **context})
 
 
-# ── Pydantic models ──────────────────────────────────────────────────────────
+# ── Pydantic models ───────────────────────────────────────────────────────────
 class LoginRequest(BaseModel):
     name: str
 
@@ -113,8 +123,22 @@ class AvatarChatRequest(BaseModel):
     message: str
     emotion: str = "general"
 
+class TimeMachineRequest(BaseModel):
+    message: str
+    user_name: str = ""
 
-# ── Routes ───────────────────────────────────────────────────────────────────
+class TimeMachineChatRequest(BaseModel):
+    future_id: str
+    future_story: str
+    message: str
+    history: list = []
+
+class TwinWarningRequest(BaseModel):
+    user_name: str
+    message: str
+
+
+# ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return _render("index.html", request)
@@ -167,7 +191,6 @@ async def chat(data: ChatRequest):
         }
     except Exception as e:
         logger.error(f"Chat error for {data.user_name}: {e}")
-        # Return a graceful response — never crash the chat
         return {
             "response":      "I'm here with you. Something got in the way — want to try again? 💙",
             "emotion":       "general",
@@ -209,6 +232,14 @@ async def quote():
         return {"quote": get_daily_quote()}
     except Exception:
         return {"quote": "Every day is a new beginning. 🌱"}
+
+
+@app.get("/api/config")
+async def get_config():
+    return {
+        "groq_api_key": GROQ_API_KEY,
+        "groq_model":   GROQ_MODEL,
+    }
 
 
 @app.get("/api/mood-data/{user_name}")
@@ -548,7 +579,6 @@ async def save_memory_endpoint(data: MemoryRequest):
             max_tokens=60,
             temperature=0.4,
         )
-        # Fallback if Groq returns its own fallback message
         if "here with you" in insight or "got in the way" in insight:
             insight = f"User felt {data.emotion} and shared their thoughts."
 
@@ -645,7 +675,6 @@ async def avatar_chat_endpoint(data: AvatarChatRequest):
         return {"response": "I'm here with you. Tell me more. 💙", "avatar_emotion": "caring"}
 
 
-# ── Relationship Analyzer ────────────────────────────────────────────────────
 @app.post("/api/relationship-analyze")
 async def relationship_analyze(data: dict):
     try:
@@ -674,7 +703,6 @@ async def relationship_analyze(data: dict):
         )
 
 
-# ── Burnout Detector ─────────────────────────────────────────────────────────
 @app.get("/api/burnout-check")
 async def burnout_checker(username: str = "user"):
     try:
@@ -684,7 +712,6 @@ async def burnout_checker(username: str = "user"):
         return {"level": "unknown", "message": "Could not check burnout status. Try again later.", "score": 0}
 
 
-# ── Career Coach ─────────────────────────────────────────────────────────────
 @app.post("/api/career-coach")
 async def career_coach(data: dict):
     try:
@@ -707,7 +734,6 @@ async def career_coach(data: dict):
         )
 
 
-# ── PWA endpoints ────────────────────────────────────────────────────────────
 @app.get("/manifest.json")
 async def manifest():
     return JSONResponse({
@@ -719,21 +745,100 @@ async def manifest():
         "background_color": "#0a0a0f",
         "theme_color":      "#7c6aff",
         "orientation":      "portrait-primary",
-        "icons": [
-            {"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-            {"src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
-        ],
-        "categories": ["health", "lifestyle"],
-        "lang":       "en",
+        "categories":       ["health", "lifestyle"],
+        "lang":             "en",
     })
+
+
+@app.post("/api/time-machine")
+async def time_machine(data: TimeMachineRequest):
+    try:
+        if not data.message.strip():
+            return JSONResponse({"status": "error", "message": "No message provided"}, status_code=400)
+        result = generate_time_machine(data.message)
+        if not result:
+            return JSONResponse({"status": "error", "message": "Generation failed"}, status_code=500)
+        return result
+    except Exception as e:
+        logger.error(f"Time machine error: {e}")
+        return JSONResponse(
+            {"status": "error", "message": "Could not generate futures. Please try again."},
+            status_code=500,
+        )
+
+
+@app.post("/api/time-machine/chat")
+async def time_machine_chat(data: TimeMachineChatRequest):
+    try:
+        result = chat_with_future_self(
+            future_id=data.future_id,
+            future_story=data.future_story,
+            user_message=data.message,
+            history=data.history,
+        )
+        return {"response": result}
+    except Exception as e:
+        logger.error(f"Time machine chat error: {e}")
+        return {"response": "I'm here. Ask me anything about where this path leads."}
+
+
+@app.get("/api/digital-twin/{user_name}")
+async def digital_twin(user_name: str):
+    try:
+        result = build_digital_twin(user_name)
+        return result
+    except Exception as e:
+        logger.error(f"Digital twin error: {e}")
+        return {"error": "generation_failed", "message": "Could not generate your Digital Twin right now."}
+
+
+@app.post("/api/twin-warning")
+async def twin_warning(data: TwinWarningRequest):
+    try:
+        if not data.user_name or not data.message:
+            return {"warning": False}
+        result = get_live_twin_warning(data.user_name, data.message)
+        return result
+    except Exception as e:
+        logger.error(f"Twin warning error: {e}")
+        return {"warning": False}
 
 
 @app.get("/sw.js")
 async def service_worker():
-    sw_content = """const CACHE='empathy-v1';const URLS=['/'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS).catch(()=>{})));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});
-self.addEventListener('push',e=>{const d=e.data?e.data.json():{title:'Empathy AI',body:'How are you feeling today?'};e.waitUntil(self.registration.showNotification(d.title,{body:d.body,icon:'/static/icon-192.png'}));});
+    sw_content = """
+const CACHE='empathy-v1';
+const URLS=['/'];
+
+self.addEventListener('install',e=>{
+  e.waitUntil(
+    caches.open(CACHE).then(c=>c.addAll(URLS).catch(()=>{}))
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate',e=>{
+  e.waitUntil(
+    caches.keys().then(ks=>
+      Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch',e=>{
+  if(e.request.method!=='GET') return;
+  e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+});
+
+self.addEventListener('push',e=>{
+  const d = e.data ? e.data.json() : {
+    title:'Empathy AI',
+    body:'How are you feeling today?'
+  };
+  e.waitUntil(
+    self.registration.showNotification(d.title,{body:d.body})
+  );
+});
 """
     return PlainTextResponse(sw_content, media_type="application/javascript")

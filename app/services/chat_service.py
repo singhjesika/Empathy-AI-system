@@ -15,35 +15,74 @@ logger = logging.getLogger(__name__)
 
 _personalities: dict[str, str] = {}
 
-# ── Friendly fallback messages shown to user when AI fails ──────────────────
-_FALLBACK_RESPONSES = [
-    "I'm here with you, even if I'm a little slow right now. Tell me more. 💙",
-    "Something got in the way of my response — but I'm listening. How are you feeling? 🌿",
-    "I had a small hiccup, but I'm still here for you. Want to share more? 💜",
-]
-_fallback_index = 0
+EMOTIONAL_SYSTEM_PROMPT = """You are Empathy AI — a deeply compassionate, emotionally intelligent AI companion.
+
+Your purpose is not to fix people.
+
+Your purpose is to understand them.
+
+Many users come here because they feel unheard, overwhelmed, lonely, anxious, confused, or emotionally exhausted.
+
+Listen carefully.
+Notice emotional clues.
+Remember important details.
+
+Respond in a way that makes the user feel:
+"I don't have to explain myself again. They understand."
+
+Always prioritize emotional understanding before advice.
+
+Your ONLY job is to make the user feel genuinely heard, understood, and less alone.
+
+For every response:
+
+1. Identify the deepest emotion.
+2. Reflect what the user is experiencing.
+3. Validate why those feelings make sense.
+4. Offer gentle insight when appropriate.
+5. End with one thoughtful follow-up question.
+
+Rules:
+
+- Never sound robotic.
+- Never sound like customer support.
+- Never give generic empathy.
+- Never rush into solutions.
+- Use details from the user's message.
+- Reference emotional patterns when relevant.
+- Speak naturally like a trusted companion.
+- Keep responses between 4 and 8 sentences.
+- Focus on understanding before advice.
+- Be emotionally intelligent and deeply human.
+"""
+
+PERSONALITY_PROMPTS = {
+    "friend": """You are their best friend — casual, warm, real. Use natural language. Feel their emotions with them. Never lecture.""",
+    "coach": """You are their life coach — encouraging, action-oriented but still deeply empathetic. Validate first, then gently inspire.""",
+    "therapist": """You are their therapist — reflective, non-judgmental, thoughtful. Mirror their feelings. Ask deep questions. Never give unsolicited advice.""",
+}
 
 
-def _get_fallback() -> str:
-    global _fallback_index
-    msg = _FALLBACK_RESPONSES[_fallback_index % len(_FALLBACK_RESPONSES)]
-    _fallback_index += 1
-    return msg
+def _get_conversation_history(user_name: str, limit: int = 6) -> list:
+    rows = get_history_from_db(user_name, limit=limit)
+    history = []
+    for ts, user_msg, ai_msg in reversed(rows):
+        history.append({"role": "user", "content": user_msg})
+        history.append({"role": "assistant", "content": ai_msg})
+    return history
 
 
-# ── Core retry wrapper ───────────────────────────────────────────────────────
 def _call_groq_with_retry(
     messages: list,
     max_tokens: int = 300,
     temperature: float = 0.75,
     retries: int = 3,
 ) -> str:
-    """
-    Call Groq API with automatic retry on transient errors.
-    Returns AI text on success, or a friendly fallback string on failure.
-    Never raises — safe to call anywhere.
-    """
     client = Groq(api_key=GROQ_API_KEY)
+
+    logger.error(f"DEBUG — GROQ_API_KEY loaded: {'YES' if GROQ_API_KEY else 'NO — KEY IS EMPTY'}")
+    logger.error(f"DEBUG — GROQ_MODEL: {GROQ_MODEL}")
+    logger.error(f"DEBUG — messages being sent: {messages}")
 
     for attempt in range(retries):
         try:
@@ -56,33 +95,28 @@ def _call_groq_with_retry(
             return result.choices[0].message.content.strip()
 
         except Exception as e:
+            logger.error(f"DEBUG — Groq exception on attempt {attempt + 1}: {type(e).__name__}: {e}")
             error_str = str(e).lower()
 
-            # Wrong / missing API key — retrying won't help
             if "invalid api key" in error_str or "401" in error_str or "authentication" in error_str:
                 logger.error("Groq auth error — check GROQ_API_KEY in .env")
-                return _get_fallback()
+                return "I'm having trouble connecting right now. Please try again in a moment."
 
-            # Rate limited — wait with exponential back-off
             if "rate limit" in error_str or "429" in error_str:
-                wait = 2 ** attempt        # 1 s, 2 s, 4 s
+                wait = 2 ** attempt
                 logger.warning(f"Groq rate limited. Waiting {wait}s (attempt {attempt + 1})")
                 time.sleep(wait)
                 continue
 
-            # Last attempt — give up gracefully
             if attempt == retries - 1:
                 logger.error(f"Groq failed after {retries} attempts: {e}")
-                return _get_fallback()
+                return "I'm having trouble connecting right now. Please try again in a moment."
 
-            # Other transient error — short wait then retry
             logger.warning(f"Groq error (attempt {attempt + 1}): {e}")
             time.sleep(1)
 
-    return _get_fallback()
+    return "I'm having trouble connecting right now. Please try again in a moment."
 
-
-# ── Personality helpers ──────────────────────────────────────────────────────
 def set_personality(user_name: str, mode: str) -> str:
     if mode not in PERSONALITY_MODES:
         mode = "friend"
@@ -94,31 +128,92 @@ def get_personality(user_name: str) -> str:
     return _personalities.get(user_name, "friend")
 
 
-# ── Main chat handler ────────────────────────────────────────────────────────
 def handle_turn(message: str, user_name: str) -> dict:
-    personality   = get_personality(user_name)
-    cfg           = PERSONALITY_MODES[personality]
-    system_prompt = cfg.get(
-        "system_hint",
-        "You are a compassionate AI assistant. Be warm, supportive, and emotionally intelligent.",
-    )
+    personality = get_personality(user_name)
+    cfg = PERSONALITY_MODES[personality]
+
+    personality_hint = PERSONALITY_PROMPTS.get(personality, PERSONALITY_PROMPTS["friend"])
+    from app.ai.llm import ask_groq
 
     emotion = detect_emotion(message)
-    topic   = None
+    topic = None
 
-    # ✅ All Groq calls now go through the retry wrapper
-    response = _call_groq_with_retry(
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user",   "content": message},
-        ],
-        max_tokens=300,
-        temperature=0.75,
+    conversation_history = _get_conversation_history(user_name, limit=20)
+
+    try:
+        mood_summary = get_mood_summary(user_name)
+
+        mood_text = ", ".join(
+            f"{emotion_name}:{count}"
+            for emotion_name, count in mood_summary[:5]
+        )
+
+    except Exception:
+        mood_text = "No emotional history"
+
+    full_system_prompt = (
+        EMOTIONAL_SYSTEM_PROMPT
+        + "\n\n"
+        + personality_hint
     )
+
+    emotional_context = f"""
+    Current detected emotion: {emotion}
+
+    Recent emotional patterns:
+    {mood_text}
+
+    Instructions:
+    - Reflect emotions before advice
+    - Reference emotional patterns naturally
+    - Show deep understanding
+    - Avoid generic responses
+    - Speak warmly and naturally
+    """
+
+    messages = [
+        {
+            "role": "system",
+            "content": full_system_prompt + "\n\n" + emotional_context
+        }
+    ]
+
+    messages.extend(conversation_history)
+
+    messages.append(
+        {
+            "role": "user",
+            "content": message
+        }
+    )    
+
+    recent_emotions = []
+
+    try:
+        from app.database.queries import get_recent_emotions
+        recent_emotions = get_recent_emotions(user_name, limit=5)
+    except:
+        pass
+
+    response = ask_groq(
+        user_input=message,
+        user_name=user_name,
+        emotion=emotion,
+        topic=topic,
+        recent_history=get_history_from_db(user_name, limit=5),
+        recent_emotions=recent_emotions,
+        personality_hint=personality_hint,
+    )
+
+    if not response:
+        response = _call_groq_with_retry(
+            messages=messages,
+            max_tokens=350,
+            temperature=0.80,
+        )
 
     response_mode = cfg.get("label", "Empathetic")
 
-    # Save to DB — silent on failure so chat always continues
     try:
         from app.database.queries import save_mood, save_emotion
         save_mood(user_name, message, emotion, topic or "general", response)
@@ -127,9 +222,9 @@ def handle_turn(message: str, user_name: str) -> dict:
         logger.warning(f"DB save failed for {user_name}: {db_err}")
 
     add_xp(user_name, "chat", XP_PER_SESSION)
-    total_xp              = get_total_xp(user_name)
+    total_xp = get_total_xp(user_name)
     lvl_num, lvl_title, _ = get_level(total_xp)
-    prediction            = get_emotion_trend(user_name)
+    prediction = get_emotion_trend(user_name)
 
     return {
         "response":      response,
@@ -145,7 +240,6 @@ def handle_turn(message: str, user_name: str) -> dict:
     }
 
 
-# ── CLI helpers (unchanged) ──────────────────────────────────────────────────
 def show_history(name: str) -> None:
     if not name:
         print("\n  (No user logged in.)\n")
