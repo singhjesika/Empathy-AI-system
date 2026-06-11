@@ -1,175 +1,166 @@
-# 🧠 Empathy AI v12.0
+# 🧠 Empathy AI Assistant
 
-> An intelligent emotional wellness assistant powered by AI.
-> Built to support users through empathetic conversations, mood insights, personal growth tools, and smart wellness analytics.
+> An intelligent emotional support web application powered by Groq AI — helping users track moods, reflect through journaling, understand relationships, and build emotional resilience.
 
----
 
-## 🌟 Overview
+## ✨ Features
 
-**Empathy AI** is a next-generation AI assistant focused on emotional well-being, self-awareness, productivity, and mental wellness support.
-
-Unlike normal chatbots, Empathy AI combines:
-
-* 💬 Human-like empathetic conversations
-* 📊 Mood and behavior analytics
-* 🧠 AI memory & personalization
-* 🤖 Avatar chat experience
-* 🚀 Growth & coaching tools
-* 📱 Progressive Web App (PWA) support
-
----
-
-## ✨ Core Features
-
-## 💬 AI Chat Modes
-
-Choose your preferred AI personality:
-
-* 🤝 **Friend Mode** – Casual support and warm conversation
-* 🎯 **Coach Mode** – Motivation, discipline, productivity
-* 🧠 **Therapist Mode** – Reflection, emotional guidance
-
----
-
-## 📈 Wellness & Analytics
-
-* 📊 Mood Report Dashboard
-* 📅 Emotion Heatmap
-* 📈 Weekly Wellness Report
-* 🔮 Emotional Forecast
-* 🧬 Emotional DNA Analysis
-* 📓 Emotion Journal
-* 💾 AI Memory System
-
----
-
-## 🚀 Productivity & Growth Tools
-
-* 🔥 Burnout Detector
-* 🚀 Career Coach
-* 💞 Relationship Analyzer
-* 🌬️ Breathing Exercise
-* ✨ Daily Motivational Quotes
-* XP + Level Progression System
-* Streak Tracking
-
----
-
-## 🤖 Smart Experience
-
-* 🎭 Avatar Chat Interface
-* 🔊 Voice Output
-* 🌤️ Emotional Weather
-* Real-time Mood Insights
-* Personalized Suggestions
-
----
-
-## 📱 PWA Ready
-
-Install Empathy AI like a mobile/desktop app.
-
-* Works like native app
-* Fast loading
-* Offline-ready structure
-* Responsive UI
+| Feature | Description |
+|---|---|
+| 💬 **AI Chat** | Empathetic conversations powered by Groq LLM |
+| 📊 **Mood Tracker** | Log daily moods with visual trend charts |
+| 📔 **Journal** | Private journaling with AI-generated reflections |
+| 🌡️ **Emotion Heatmap** | Calendar-based visualization of emotional patterns |
+| 📈 **Weekly Report** | Auto-generated emotional health summaries |
+| 🔮 **Mood Forecast** | Predict emotional trends from historical data |
+| 💑 **Relationship Analysis** | Analyze relationship dynamics with AI insights |
+| 🔥 **Burnout Detection** | Early warning system for emotional exhaustion |
+| 🚀 **Career Coaching** | AI-guided career and motivation support |
+| ⏳ **Time Machine** | Revisit past emotional states and growth journey |
+| 🤖 **Digital Twin** | Personalized AI model that learns your emotional patterns |
+| 🎙️ **Voice Avatar** | Speech recognition for hands-free interaction |
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Backend
-
-* Python
-* FastAPI
-* SQLite
-
-### Frontend
-
-* HTML5
-* CSS3
-* JavaScript
-
-### AI / Logic
-
-* LLM Integration
-* Emotion Detection Engine
-* Pattern Intelligence
-* Predictive Analytics
+| Layer | Technology |
+|---|---|
+| **Backend** | FastAPI + Uvicorn (Python) |
+| **AI Engine** | Groq API (LLaMA 3) |
+| **Database** | SQLite |
+| **Frontend** | Vanilla JS + HTML + CSS |
+| **Charts** | Chart.js |
+| **Auth** | JWT-based login system |
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
-```text
-Empathy_AI_Assistant/
-│── app/
-│   ├── ai/
-│   ├── analytics/
-│   ├── database/
-│   ├── services/
-│   ├── static/
-│   ├── templates/
-│   ├── ui/
-│   └── utils/
+```
+Empathy-AI-system/
+├── main.py                  # FastAPI app entry point
+├── database.py              # SQLite models and connection
+├── auth.py                  # Login / JWT authentication
+├── requirements.txt
+├── .env                     # API keys (not committed)
 │
-│── run.py
-│── requirements.txt
-│── .gitignore
+├── routes/
+│   ├── chat.py              # AI chat endpoint
+│   ├── mood.py              # Mood logging and retrieval
+│   ├── journal.py           # Journal CRUD
+│   ├── report.py            # Weekly report generation
+│   ├── forecast.py          # Mood forecast
+│   ├── relationship.py      # Relationship analysis
+│   ├── burnout.py           # Burnout detection
+│   ├── career.py            # Career coaching
+│   └── twin.py              # Digital twin
+│
+└── static/
+    ├── index.html           # Login page
+    ├── dashboard.html       # Main dashboard
+    ├── chat.html            # AI chat UI
+    ├── mood.html            # Mood tracker
+    ├── journal.html         # Journal UI
+    ├── heatmap.html         # Emotion heatmap calendar
+    ├── report.html          # Weekly report
+    ├── forecast.html        # Mood forecast
+    ├── relationship.html    # Relationship analysis
+    ├── burnout.html         # Burnout checker
+    ├── career.html          # Career coaching
+    ├── timemachine.html     # Time machine
+    └── avatar.html          # Voice avatar
 ```
 
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/singhjesika/Empathy-AI-system.git
+cd Empathy-AI-system
+```
+
+### 2. Create virtual environment
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Mac/Linux
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Set up environment variables
+Create a `.env` file in the root:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+SECRET_KEY=your_jwt_secret_here
+```
+Get your free Groq API key at → https://console.groq.com
+
+### 5. Run the app
+```bash
+uvicorn main:app --reload
+```
+
+Open your browser at → **http://localhost:8000**
 
 ---
 
-## 📸 Screenshots
+## 🔑 Environment Variables
 
-* Modern AI Chat Interface
-* Analytics Dashboard
-* Weekly Wellness Reports
-* Multi-Mode AI Assistant
-* Avatar Experience
+| Variable | Description | Where to get |
+|---|---|---|
+| `GROQ_API_KEY` | Groq LLM API key | https://console.groq.com |
+| `SECRET_KEY` | JWT signing secret | Any random string |
 
-(Add screenshots here)
+## 📊 API Endpoints
 
----
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/auth/register` | Register new user |
+| POST | `/auth/login` | Login and get JWT token |
+| POST | `/chat` | Send message to AI |
+| POST | `/mood` | Log mood entry |
+| GET | `/mood/history` | Get mood history |
+| GET | `/mood/heatmap` | Heatmap calendar data |
+| POST | `/journal` | Create journal entry |
+| GET | `/journal` | Get all journal entries |
+| GET | `/report/weekly` | Generate weekly report |
+| GET | `/forecast` | Get mood forecast |
+| POST | `/relationship/analyze` | Analyze relationship |
+| GET | `/burnout/score` | Get burnout score |
+| POST | `/career/coach` | Get career coaching |
 
-## 🎯 Use Cases
-
-* Emotional support companion
-* Student stress management
-* Productivity coaching
-* Habit growth assistant
-* Mental wellness journaling
-* Personal self-awareness tool
-
----
-
-## 🚀 Future Roadmap
-
-* Mobile App (Android / iOS)
-* Multilingual AI Support
-* Face Emotion Detection
-* Smart Notifications
-* Therapist Booking Integration
-* Team Wellness Dashboard
-* SaaS Subscription Model
+Full interactive docs → **http://localhost:8000/docs**
 
 ---
 
-## 👨‍💻 Developer
+## 🤝 Contributing
 
-Built with passion by **Jesika**
-
----
-
-## ⭐ Why This Project Matters
-
-Mental wellness + AI is one of the fastest growing future industries.
-Empathy AI is designed as a real-world product idea, not just a student project.
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit: `git commit -m "Add your feature"`
+4. Push: `git push origin feature/your-feature`
+5. Open a Pull Request
 
 ---
 
+## 📄 License
 
+This project is licensed under the MIT License.
 
 ---
+
+## 👩‍💻 Author
+
+**Jesika PRATAP Singh**
+- GitHub: [@singhjesika](https://github.com/singhjesika)
+
+---
+
+> _"Technology with empathy — because mental wellness matters."_ 💙
